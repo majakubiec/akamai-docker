@@ -37,7 +37,7 @@ export BUILD_NUMBER=${BUILD_NUMBER:-${TRAVIS_BUILD_NUMBER:-local}}
 # Enable docker buildkit; optimizes build speed and output (set to 1)
 # Currently disabled because unsupported OOTB by docker on travis, we
 # probably need to do some monkey patching of the daemon config.
-export DOCKER_BUILDKIT=0
+export DOCKER_BUILDKIT=1
 
 # Get currently built branch from travis env, or git if building locally
 export BRANCH=${TRAVIS_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
