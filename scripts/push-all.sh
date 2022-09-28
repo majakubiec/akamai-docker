@@ -64,6 +64,8 @@ current_build_tags | grep -Ev 'mjakubietest/(base|.*-chain)' |
   done
 
 
+source ./scripts/removetag.sh
+
 current_build_tags | grep -Ev 'mjakubietest/(base|.*-chain)' |
   while read image;
   do
@@ -72,5 +74,7 @@ current_build_tags | grep -Ev 'mjakubietest/(base|.*-chain)' |
     do
       docker manifest create "$image:$tag" --amend "$image:arm64" --amend "$image:amd64"
       docker manifest push "$image:$tag"
+      remove_tag $image arm64
+      remove_tag $image amd64
     done
   done
