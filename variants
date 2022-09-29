@@ -26,30 +26,30 @@ base
 base cli
 
 # specialized variants
-cli adaptive-acceleration
-cli api-gateway
-cli appsec
-cli cloudlets
-cli cps
-cli dns
-cli eaa
-cli edgeworkers
-cli firewall
-cli image-manager
-cli jsonnet
-cli property-manager
-property-manager onboard
-cli purge
-cli sandbox
-cli terraform-cli
-cli etp
-cli gtm
+# cli adaptive-acceleration
+# cli api-gateway
+# cli appsec
+# cli cloudlets
+# cli cps
+# cli dns
+# cli eaa
+# cli edgeworkers
+# cli firewall
+# cli image-manager
+# cli jsonnet
+# cli property-manager
+# property-manager onboard
+# cli purge
+# cli sandbox
+# cli terraform-cli
+# cli etp
+# cli gtm
 
-# Non-Akamai CLI utilities
-# httpie + edgegrid
-base httpie
-# terraform + akamai provider
-base terraform
+# # Non-Akamai CLI utilities
+# # httpie + edgegrid
+# base httpie
+# # terraform + akamai provider
+# base terraform
 
-# interactive variant with all the things, for experimentation.
-cli adaptive-acceleration api-gateway appsec cloudlets cps dns eaa edgeworkers firewall httpie image-manager jsonnet property-manager onboard purge sandbox terraform terraform-cli etp gtm shell
+# # interactive variant with all the things, for experimentation.
+# cli adaptive-acceleration api-gateway appsec cloudlets cps dns eaa edgeworkers firewall httpie image-manager jsonnet property-manager onboard purge sandbox terraform terraform-cli etp gtm shell

@@ -16,7 +16,7 @@
 # BUILD ARGS
 #########
 
-ARG BASE=akamai/base
+ARG BASE=mjakubietest/base:arm64
 
 #####################
 # BUILDER
@@ -24,7 +24,8 @@ ARG BASE=akamai/base
 
 FROM alpine:3.13 as builder
 ARG TERRAFORM_VERSION=1.2.5
-ARG TERRAFORM_SHA256SUM=281344ed7e2b49b3d6af300b1fe310beed8778c56f3563c4d60e5541c0978f1b
+ARG TERRAFORM_SHA256SUM_amd64=281344ed7e2b49b3d6af300b1fe310beed8778c56f3563c4d60e5541c0978f1b
+ARG TERRAFORM_SHA256SUM_arm64=0544420eb29b792444014988018ae77a7c8df6b23d84983728695ba73e38f54a
 
 # Because the builder downloads the latest akamai provider,
 # subsequent terraform init calls will download to this directory
@@ -40,12 +41,16 @@ ENV TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR}"
 COPY files/upx-noop /usr/bin/upx
 RUN chmod +x /usr/bin/upx
 
-RUN apk add --no-cache $(apk search --no-cache | grep -q ^upx && echo -n upx) ca-certificates curl \
-    && curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-    && echo "${TERRAFORM_SHA256SUM} *terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS \
+ARG TARGETARCH
+ENV ARCH="${TARGETARCH}"
+
+RUN set -x ;apk add --no-cache $(apk search --no-cache | grep -q ^upx && echo -n upx) ca-certificates curl \
+    && curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_$ARCH.zip > terraform_${TERRAFORM_VERSION}_linux_$ARCH.zip \
+    && eval "TERRAFORM_SHA256SUM=\$TERRAFORM_SHA256SUM_$ARCH" \
+    && echo "${TERRAFORM_SHA256SUM} *terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS \
     && sha256sum -c terraform_${TERRAFORM_VERSION}_SHA256SUMS \
-    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin \
-    && rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS \
+    && unzip terraform_${TERRAFORM_VERSION}_linux_$ARCH.zip -d /usr/local/bin \
+    && rm -f terraform_${TERRAFORM_VERSION}_linux_$ARCH.zip terraform_${TERRAFORM_VERSION}_SHA256SUMS \
     && upx -o/usr/local/bin/terraform.upx /usr/local/bin/terraform
 
 # initialize latest akamai provider;
@@ -66,15 +71,15 @@ RUN mkdir -p ${TF_PLUGIN_CACHE_DIR} \
 # FINAL
 #########
 
-FROM $BASE
+# FROM $BASE
 
-ARG TF_PLUGIN_CACHE_DIR="/var/terraform/plugins"
-ENV TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR}"
+# ARG TF_PLUGIN_CACHE_DIR="/var/terraform/plugins"
+# ENV TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR}"
 
-RUN apk add --no-cache curl ca-certificates
+# RUN apk add --no-cache curl ca-certificates
 
-COPY --from=builder /terraform.tf /terraform.tf
-COPY --from=builder /usr/local/bin/terraform.upx /usr/local/bin/terraform
-# we copy over the plugin directory; terraform init will link plugins to
-# the files in this directory if available
-COPY --from=builder /var/terraform /var/terraform
+# COPY --from=builder /terraform.tf /terraform.tf
+# COPY --from=builder /usr/local/bin/terraform.upx /usr/local/bin/terraform
+# # we copy over the plugin directory; terraform init will link plugins to
+# # the files in this directory if available
+# COPY --from=builder /var/terraform /var/terraform

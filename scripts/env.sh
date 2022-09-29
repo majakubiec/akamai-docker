@@ -32,7 +32,7 @@ export BUILD_TIME_TAG=${BUILD_TIME_TAG:-$(date -u +"%Y%m%d")}
 # docker images --filter org.label-schema.build-number=local
 #
 # Also see the `current_build_tags()` function below.
-export BUILD_NUMBER=${BUILD_NUMBER:-${TRAVIS_BUILD_NUMBER:-local}}
+export BUILD_NUMBER=${BUILD_NUMBER:-${GITHUB_RUN_NUMBER:-local}}
 
 # Enable docker buildkit; optimizes build speed and output (set to 1)
 # Currently disabled because unsupported OOTB by docker on travis, we
@@ -40,7 +40,7 @@ export BUILD_NUMBER=${BUILD_NUMBER:-${TRAVIS_BUILD_NUMBER:-local}}
 export DOCKER_BUILDKIT=1
 
 # Get currently built branch from travis env, or git if building locally
-export BRANCH=${TRAVIS_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
+export BRANCH=${GITHUB_REF_NAME:-$(git rev-parse --abbrev-ref HEAD)}
 
 # Extra arguments to pass to docker build, e.g. --build-args
 # Supported build args include:
