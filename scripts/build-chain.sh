@@ -58,11 +58,11 @@ build_img() {
   if [ "$#" == 2 ]; # $1=image, $2=Dockerfile
   then
     docker build --platform linux/arm64 --force-rm -t $1:arm64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" .
-    # docker build --platform linux/amd64 --force-rm -t $1:amd64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" .
+    docker build --platform linux/amd64 --force-rm -t $1:amd64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" .
   elif [ "$#" == 3 ]; # ..., $3=Base image
   then
     docker build --platform linux/arm64 --force-rm -t $1:arm64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" --build-arg BASE=$3:arm64 .
-    # docker build --platform linux/amd64 --force-rm -t $1:amd64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" --build-arg BASE=$3:amd64 .
+    docker build --platform linux/amd64 --force-rm -t $1:amd64 -f $2 ${DOCKER_BUILD_EXTRA_ARGS} "${labels[@]}" --build-arg BASE=$3:amd64 .
   fi
 }
 
