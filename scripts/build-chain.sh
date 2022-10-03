@@ -79,12 +79,6 @@ build_chain() {
     done
     build_img $DOCKER_REPOSITORY/$1 dockerfiles/$1.Dockerfile $DOCKER_REPOSITORY/$base
   fi
-
-#  # Tag image
-#  for tag in ${DOCKER_TAG};
-#  do
-#    docker tag "akamai/$1" "akamai/$1:$tag"
-#  done
 }
 
 build_chain $@
