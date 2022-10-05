@@ -62,7 +62,7 @@ guess_tag() {
   fi
 
   # Final list of tags depends on the context:
-  echo ${latest};;
+  echo ${latest}
 }
 export DOCKER_TAG="${DOCKER_TAG:-$(guess_tag)}"
 
