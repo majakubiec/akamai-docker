@@ -6,8 +6,8 @@ on:
     tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
   schedule:
-    # Runs "At 06:00 on Monday" (see https://crontab.guru)
-    - cron: '0 6 * * 1'
+    # Runs "At 10:30 UTC on Thursday" (see https://crontab.guru)
+    - cron: '30 10 * * 4'
 
 jobs:
   build:
